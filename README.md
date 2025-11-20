@@ -1,12 +1,466 @@
 # 이자목(202530122)
 
 
+## (11월 20일 강의)
 
+## 자비의 이벤트 처리
+
+
+
+
+
+```javaㄴ
+import javax.swing.*;
+import java.awt.*;
+
+public class Ex86NullContainerEx extends JFrame {
+
+  public Ex86NullContainerEx() {
+    setTitle("배치관리자 없이 절대 위치에 배치하는 예제");
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    Container contentPane = getContentPane();
+    contentPane.setLayout(null); // 컨텐트팬의 배치관리자 제거
+
+    // 레이블 설정
+    JLabel la = new JLabel("Hello, Press Buttons!");
+    la.setLocation(130, 50); // la를 (130,50) 위치로 지정
+    la.setSize(200, 20); // la를 200x20 크기로 지정
+    contentPane.add(la); // la를 컨텐트팬에 부착
+
+    // 9개의 버튼 컴포넌트를 생성하고 동일한 크기로 설정한다.
+    // 위치는 서로 겹치게 설정한다.
+    for (int i = 1; i <= 9; i++) {
+      JButton b = new JButton(Integer.toString(i)); // 버튼 생성
+      b.setLocation(i * 15, i * 15); // 버튼의 위치 설정
+      b.setSize(50, 20); // 버튼의 크기는 동일하게 50x20
+      contentPane.add(b); // 버튼을 컨텐트팬에 부착
+    }
+
+    setSize(300, 200);
+    setVisible(true);
+  }
+
+  public static void main(String[] args) {
+    new Ex86NullContainerEx();
+  }
+}
+```
+
+
+## 컴보넌트의 절대 생성자
+![스윙](image4.png)
+
+
+```java
+import java.awt.*;
+import javax.swing.*;
+
+public class Ex85GridLayoutEx extends JFrame {
+  public Ex85GridLayoutEx() {
+    super("GridLayout 예제");
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    Container contentPane = getContentPane();
+
+    // 1x10의 GridLayout 배치관리자
+    contentPane.setLayout(new GridLayout(1, 10));
+
+    for (int i = 0; i < 10; i++) {  // 10개의 버튼 부착
+      String text = Integer.toString(i);  // i를 문자열로 변환
+      JButton button = new JButton(text);
+      contentPane.add(button);            // 컨텐트팬에 버튼 부착
+    }
+
+    setSize(500, 200);
+    setVisible(true);
+  }
+
+  public static void main(String[] args) {
+    new Ex85GridLayoutEx();
+  }
+}
+
+```
+
+
+## gridlayout 생성자
+![스윙](image3.png)
+## 배치 관리자 유형
+![스윙](image1.png)
+
+## 스윙
+![스윙](image.png)
+```java
+import javax.swing.*;
+import java.awt.*;
+
+public class Ex82ContentPaneEx extends JFrame {
+    public Ex82ContentPaneEx() {
+        setTitle("ContentPane과 JFrame 예제"); // 프레임의 타이틀 달기
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        Container contentPane = getContentPane(); // 컨텐트팬 알아내기
+        contentPane.setBackground(Color.ORANGE);  // 오렌지색 배경 설정
+        contentPane.setLayout(new FlowLayout());  // 컨텐트팬에 FlowLayout 배치관리자 달기
+
+        contentPane.add(new JButton("OK"));      // OK 버튼 달기
+        contentPane.add(new JButton("Cancel"));  // Cancel 버튼 달기
+        contentPane.add(new JButton("Ignore"));  // Ignore 버튼 달기
+
+        setSize(300, 150);   // 프레임 크기 300x150 설정
+        setVisible(true);    // 화면에 프레임 출력
+    }
+
+    public static void main(String[] args) {
+        new Ex82ContentPaneEx();
+    }
+}
+
+```
+
+
+
+# (11월 13일 강의)
+
+
+## 컨테이너와 컴포넌트
+* 컨테이너
+
+  -다른 컴포넌트를 포함할 수 있는 GUI 컴포넌트 : java.awt.Container를 상속받음
+
+  -다른 컨테이너에 포함될 수 있음
+
+  -AWT 컨테이너 : Panel, Frame, Applet, Dialog, Window
+
+  -Swing 컨테이너 : JPanel, JFream, JApplet, JDialon, JWindow
+
+
+* 컴포넌트
+
+  -컨테이너에 포함되어야 화면에 출력될 수 있는 GUI 객체
+
+  -다른 컴포넌트를 포함할 수 없는 순수 컴포넌트
+
+  -모든 GUI 컴포넌트가 상속받는 클래스 : java.awt.Component
+
+  -스윙 컴포넌트가 상속받는 클래스 : javax.swing.Jcomponent
+
+
+* 최상위 컨테이너
+
+  -다른 컨테이너에 포함되지 않고도 화면에 출력되며, 독립적으로 존재 가능한 컨테이너
+
+  -스스로 화면에 자신을 출력하는 컨테이너 : JFrame, JDialog, JApplet
+
+## Swing 프레임
+
+* 스윙 프레임 : 모든 스윙 컴포넌트를 담는 최상위 컨테이너
+
+  -JFrame을 상속받아 구현
+
+  -컴포넌트들은 화면에 보이려면 스윙 프레임에 부착되어야 함
+
+  -프레임을 닫으면 프레임에 부착된 모든 컴포넌트가 보이지 않게 됨
+
+
+* 스윙 프레임(JFrame) 기본 구성
+
+  -프레임 : 스윙 프로그램의 기본 틀
+
+  -메뉴바 : 메뉴들이 부착되는 공간
+
+  -컨텐트팬 : GUI 컴포넌트들이 부착되는 공간
+
+
+## 프레임 만들기, JFrame 클래스 상속
+
+* 스윙 프레임
+
+  -JFrame 클래스를 상속받은 클래스 작성
+
+  -프레임의 크기 반드시 지정 : setSize() 호출
+
+  -프레임을 화면에 출력하는 코드 반드시 필요 : setVisible(true) 호출
+
+## 프레임에 컴포넌트 붙이기
+* 타이틀 달기
+
+  -super()나 setTitle() 이용
+```java
+MyFrame() {
+    super("타이틀문자열");
+} 
+```
+
+* 컨텐트팬에 컴포넌트 달기
+
+  -컨텐트팬이란? 스윙 컴포넌트들이 부착되는 공간
+
+  -컨텐트팬 알아내기 : 스윙 프레임에 붙은 디폴트 컨텐트팬 알아내기
+```java
+public class myFrame extends JFrame {
+    MyFrame() {
+        Cotainer contentPane = getContentPane();
+    }
+}
+```
+
+*
+
+-컨텐트팬에 컴포넌트 붙이기
+
+-컨텐트팬 변경
+
+## Tip. 컨텐트팬에 대한 JDK 1.5 이후의 추가 사항
+
+* JDK 1.5 이전
+
+  -프레임의 컨텐트팬을 알아내어, 반드시 컨텐트팬에 컴포넌트 부착
+
+```java
+Container c = frame.getContentPane();
+c.add(new JButton("Click")); // 컨텐트팬에 직접 컴포넌트 부착
+```
+
+* JDK 1.5 이후 추가된 사항
+  -프레임에 컴포넌트를 부착하면 프레임이 대신 컨텐트팬에 부착
+
+```java
+frame.add(new JButton("Click"));
+// 프레임이 버튼 컴포넌트를 컨텐트팬에 대신 부착
+```
+
+* 저자의 결론
+
+  -JDK1.5 이전처럼 직접 컨텐트팬에 컴포넌트를 부착하는 것이 바람직함
+
+  -컨텐트팬 다루기 능력 필요하기 때문
+
+  -컴포넌트의 부모가 프레임이 아닌, 컨텐트팬임을 알고 명확히 사용할 필요
+
+## 자바의 GUI(Graphical User Interface)
+
+* GUI : 사용자가 편리하게 입출력 할 수 있도록 `그래픽으로 화면을 구성하고`, 마우스나
+
+  키보드로 입력 받을 수 있도록 지원하는 사용자 인터페이스
+* 자바 언어에서 GUi 응용프로그램 작성 : `AWT와 Swing 패키지`에 강력한 GUI 컴포넌트 제공
+
+
+[AWT(Abstract Windowing Toolkit) 패키지]
+* 자바가 처음 나왔을 때부터 배포된 GUI 패키지, `최근에는 거의 사용하지 않음`
+* AWT 컴포넌트는 `중량 컴포넌트(heavy weight component)`
+* AWT 컴포넌트의 그리기는 `운영체제에 의해 이루어지며`, `운영체제에 의 자원을 많이 소모`하고 부담을 줌
+* 운영체제가 직접 그리기 때문에 `속도는 빠름`
+
+[Swing 패키지]
+
+* AWT 기술을 기반으로 작성된 자바 라이브러리
+
+
+* 모든 AWT 기능 + 추가된 풍부하고 화려한 고급 컴포넌트
+
+
+* AWT 컴포넌트를 모두 스윙으로 재작성
+
+
+* AWT 컴포넌트를 모두 스윙으로 재작성
+
+
+* AWT 컴포넌트 이름 앞에 J자를 덧붙임
+
+
+* 순수 자바 언어로 구현
+
+
+* 스윙 컴포넌트는 경량 컴포넌트(light weight component)
+
+
+* 스윙 컴포넌트는 운영체제의 도움을 받지 않고, 직접 그리기 때문에 운영체제에 부담주지 않음
+
+
+* 현재 자바의 GUI 표준으로 사용됨
+
+
+
+## toString() 메소드, 객체를 문자열로 변환
+
+* 각 클래스는 toString()을 오버라이딩하여 자신만의 문자열로 리턴 가능
+
+  -객체를 문자열로 반환
+
+  -원형 : public String toString();
+
+
+* 컴파일러에 의한 toString() 자동 변환
+
+  -'객체 + 문자열'->'객체.toString() + 문자열'로 자동 변환
+
+  -객체를 단독으로 사용하는 경우 -> 객체.toString()으로 자동변환
+
+## 객체 비교(==)와 equals() 메소드
+
+* == 연산자 : 객체 레퍼런스 비교
+```java
+Point a = new Point(2,3) ;
+Point b = new Point(2,3) ;
+Point c = new Point(3,4) ;
+if(a == b) System.out.println("a==b");
+if(a.equals(b)) {
+    System.out.println("a is equal to b");
+}
+if(a.equals(c)) {
+    System.out.println("a is equal to c");
+}
+```
+* boolean equals(Object obj)
+* 두 객체의 내용물 비교
+* 객체의 내용물을 비교하기 위해 클래스의 맴버로 작성
+
+## Wrapper 클래스
+
+* Wrapper 클래스 : 자바의 기본 타입을 클래스화 한 8개 클래스를 통칭
+
+  `기본 타입 ... |byte|short|int....|long char float double boolean`
+
+  `Wrapper 클래스|Byte|Short|Integer|Long Character Float Double Boolean`
+
+* 용도 : 객체만 사용할 수 있는 컬렉션 등에 기본 타입의 값을 사용하기 위해 Wrapper 객체로 만들어 사용
+
+## Wrapper 객체 생성
+
+* 기본 타입의 값으로 Wrapper 객체 생성
+
+
+* 문자열로 Wrapper 객체 생성
+
+
+* Float 객체는 double 타입의 값으로 생성 가능
+
+## Wrapper 활용
+
+* Wrapper 객체로부터 기본 타입 값 알아내기
+```java
+Integer i = Integer.valueOf(10);         Double f = DoublevalueOf(3.14);
+int ii = i.intValue(); /* ii = 10*/      double dd = d.doubleValue(); // dd = 3.14
+
+Character c = CharactervalueOf('c');     Boolean b = BooleanvalueOf(true);
+char cc = c.charValue(); /* cc = 'c'*/   boolean bb = b.booleanValue(); // bb = true
+```
+
+
+* 문자열을 기본 데이터 타입으로 변환
+```java
+int i = integerparselnt("123");             // i = 123
+boolean b = BooleanparseBoolean("true");    // b = true
+double f = DoubleparseDouble("3.14");       // d = 3.14
+```
+
+
+* 기본 타입을 문자열로 변환
+```java
+String s1 = IntegertoString(123);     //정수 123을 문자열 "123"으로 변환
+String s2 = IntegertoHexString(123);  //정수 123을 16진수의 문자열 "7b"로 변환
+String s3 = DoubletoString(3.14);     //실수 3.14를 문자열 "3.14"로 변환
+String s4 = CharactertoString('a');   //문자 'a'를 문자열 "a"로 변환
+String s5 = BooleantoString(true);    //불린 값 true를 문자열 "true"로 변환
+```
+
+## 박싱과 언박싱
+
+* 박싱(boxing) : 기본 타입의 값을 Wrapper 객체로 변환하는 것
+
+
+* 언박싱(unboxing)  : Wrapper 객체에 들어 있는 기본 타입의 값을 빼내는 것. 박싱의 반대
+
+
+* 자동 박싱과 자동 언박싱 : JDK 1.5부터 박싱과 언박싱은 자동으로 이루어지도록 컴파일됨
+
+## String의 생성과 특징
+
+* String 클래스는 문자열을 나타냄
+
+
+* 스트링 리터럴(문자열 리터럴)은 String 객체로 처리됨
+
+
+* 스트링 객체의 생성 사례
+```java
+String str1 = "abcd";
+
+char data[] = {'a', 'b', 'c', 'd'};
+String str2 = new String(data);
+String str3 = new String("abcd"); // str2와 str3은 모두 "abcd" 스트링
+```
+
+## 스트링 리터럴과 new String()
+
+* 스트링 리터럴
+
+  -자바 가상 기계 내부에서 리터럴 테이블에 저장되고 관리됨
+
+  -응용프로그램에서 공유됨
+
+  -스트링 리터럴 사례) String s = "Hello";
+
+
+* new String()으로 생성된 스트링
+
+  -스트링 객체는 힙에 생성
+
+  -스트링은 공유되지 않음
+
+
+## 스트링 객체의 주요 특징
+
+* 스트링 객체는 수정 불가능
+
+  -리터럴 스트링이든 new String()을 생성했든 객체의 문자열 수정 불가능
+
+
+* 스트링 비교 : 두 스트링을 비교할 때 반드시 equals()를 사용하여야 함
+
+  ->equals()는 내용을 비교하기 때문
+
+
+
+## String 활용
+
+* 스트링 비교, equals()와 compareTo()
+
+  ->스트링 비교에 == 연산자 절대 `사용 금지`
+
+  -equals() : 스트링이 같으면 true, 아니면 false 리턴
+
+```java
+String java= "Java";
+if(java.equals("Java")) // true
+```
+
+* int compareTo(String anotherString)
+
+  -문자열이 같으면 0 리턴
+
+  -이 문자열이 anotherString 보다 `먼저 나오면 음수` 리턴
+
+  -이 문자열이 anotherString 보다 `나중에 나오면 양수` 리턴
+
+```java
+String java = "Java";
+String cpp = "C++";
+int res = java.compareTo(cpp);
+if(res == 0) System.out.println("the same");
+else if (res < 0) System.out.println(java + " < " + cpp);
+else System.out.println(java + " > " + cpp);
+```
+`Java > C++`
 
 # (11월 6일 강의)
 
 # (테크 페어 사진)
-
+![테크페어_사진](img/takpar.jpg)
+왼쪽 부터
+이자목, 박시현(10번), 선우혁, 송서윤, 권기범, 이상민
 
 # PR(Pull Request)
 - 남의 저장소의 내용을 내가 가져와서 업데이트한 뒤에
